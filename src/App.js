@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import './App.css';
 
-const Todo = ({ todo }) => {
+const Todo = ({ todo, index, completeTask }) => {
   return (
     <>
-      <li>{todo.text}</li>
+      <li onClick={() => completeTask(index)} 
+      style={{ textDecoration: todo.isCompleted ? 'line-through' : '' }}>
+        {todo.text}</li>
       <button>Delete</button>
     </>
   )
@@ -13,7 +15,9 @@ const Todo = ({ todo }) => {
 function App() {
 
   const [todos, setTodos] = useState([
-    { text: 'Learn React Hooks', isComplteted: false }, { text: 'Master JavaScript' }
+    { text: 'Learn React Hooks', isCompleted: false }, 
+    { text: 'Master JavaScript', isCompleted: false }, 
+    {text: 'Learn Ruby', isCompleted: false}
   ]);
 
   const [value, setValue] = useState('');
@@ -32,6 +36,12 @@ function App() {
     setTodos([...todos, { text, isCompleted: false }])
   }
 
+  const completeTask = index => {
+     const newTodos = [...todos];
+     newTodos[index].isCompleted = !newTodos[index].isCompleted;
+     setTodos(newTodos);
+  }
+
   return (
     <div className="App">
       <h1>TODO List</h1>
@@ -39,7 +49,8 @@ function App() {
         return <Todo
           key={index}
           index={index}
-          todo={todo} />
+          todo={todo}
+          completeTask={completeTask} />
       })}
       </ul>
       <form onSubmit={handleSubmit}>

@@ -1,24 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
+const Todo = ({ todo }) => {
+  return (
+    <>
+      <li>{todo.text}</li>
+      <button>Delete</button>
+    </>
+  )
+}
+
 function App() {
+
+  const [todos, setTodos] = useState([
+    { text: 'Learn React Hooks', isComplteted: false }, { text: 'Master JavaScript' }
+  ]);
+
+  const [value, setValue] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!value) {
+      return;
+    }
+    console.log(value)
+    addTodo(value);
+    setValue('');
+  }
+
+  const addTodo = (text) => {
+    setTodos([...todos, { text, isCompleted: false }])
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>TODO List</h1>
+      <ul>{todos.map((todo, index) => {
+        return <Todo
+          key={index}
+          index={index}
+          todo={todo} />
+      })}
+      </ul>
+      <form onSubmit={handleSubmit}>
+        <input
+          type='text'
+          onChange={e => setValue(e.target.value)}
+          value={value} />
+      </form>
     </div>
   );
 }
